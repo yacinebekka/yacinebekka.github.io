@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Yacine's blog – tr---yahtzee-mcts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Yacine’s blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./projects.html"> 
+<span class="menu-text">Portfolio &amp; ressources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/yacinebekka" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/yacine-bekka/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="https://www.youtube.com/channel/UCzQQNkhty1PZMvqYbUj_RVw" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-youtube"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#title" id="toc-title" class="nav-link active" data-scroll-target="#title">Title</a></li>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#mcts-algorithm" id="toc-mcts-algorithm" class="nav-link" data-scroll-target="#mcts-algorithm">MCTS algorithm</a></li>
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="title" class="level1">
+<h1>Title</h1>
+<p>Lightweight MCTS-based autonomous agent for Yahtzee</p>
+</section>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>In this technical report, we present the implementation and results of a lightweight Monte Carlo Tree Search (MCTS)-based autonomous agent for the game of Yahtzee, a dice game that involve both luck and strategy. The autonomous agent is designed to run entirely within an internet browser, requiring no backend support, and consistently achieves an average score of <span class="math inline">\(154\)</span> points. Additionally, we tested various combinations of MCTS hyperparameters and found no statistically significant effect on the game’s score.</p>
+<hr>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<ul>
+<li>Context</li>
+</ul>
+<p>Yahtzee is a popular dice game that offer an interesting challenge for reinforcement learning due to its combination of luck and strategy. In this game, the players roll five dice up to three times per turn, with the aim to meet specific scoring categories. The strategic element comes from deciding which dice to keep after roll and which scoring category to fill. This game is characterized as perfect information stochastic game, as all information on game are available to all player at any time.</p>
+<p>Reinforcement learning is a subset of machine learning where an agent learns to make decisions by making interactions within an environment. The agent receives rewards by performing actions in specific states of the environment, and its goal is to maximize the total reward over time. This paradigm fits well with many games, including Yahtzee, where each roll represents an action that leads to a new state and potential rewards based on the scoring rules.</p>
+<ul>
+<li>Problem statement</li>
+</ul>
+<p>Our goal is to create an autonomous Yahtzee agent that runs in an internet browser without any backend architecture and to evaluate the performance of the MCTS algorithm to determine if it offers a decent challenge for a human opponent.</p>
+<p>In addition to this initial objective, we also aim to gain the details of the value of each possible game action for the agent. This will allow a human player to receive real-time assistance from the agent during a game</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="yahtzee-as-a-markov-decision-process" class="level4">
+<h4 class="anchored" data-anchor-id="yahtzee-as-a-markov-decision-process">Yahtzee as a Markov decision process</h4>
+<p>Finite Markov decision process is an extension of Markov process that includes an agent that make decisions based on the stochastic process. More formally it is define as set of discrete-time steps and a tuple <span class="math inline">\(M = (S, A, P, R)\)</span> defined as :</p>
+<ul>
+<li><span class="math inline">\(S\)</span> is a finite <strong>state space</strong></li>
+<li><span class="math inline">\(A\)</span> is the <strong>action space</strong> such that <span class="math inline">\(A(s) \subseteq A\)</span> applicable on each state <span class="math inline">\(s \in S\)</span></li>
+<li><span class="math inline">\(P\)</span> the <strong>transition probability matrix</strong> which contains all the transition probability <span class="math inline">\(P(s'|s,a)\)</span> such that for any <span class="math inline">\(s \in S, s' \in S, a \in A\)</span>.</li>
+<li><span class="math inline">\(R\)</span> the <strong>reward</strong> matrix such that <span class="math inline">\(r(s,a,s')\)</span> return the reward of transitioning from state <span class="math inline">\(s\)</span> to state <span class="math inline">\(s'\)</span> using action <span class="math inline">\(a\)</span></li>
+</ul>
+</section>
+<section id="state-space" class="level4">
+<h4 class="anchored" data-anchor-id="state-space">State space</h4>
+<p>A state <span class="math inline">\(s\)</span> must capture all the information necessary to make decisions and calculate scores. We define a state <span class="math inline">\(s = (D, L, O, B)\)</span> with the following characteristics :</p>
+<ul>
+<li><span class="math inline">\(D\)</span>, the 5-dice value arrangement, represented by vector of integer
+<ul>
+<li><span class="math inline">\(252\)</span> possible values</li>
+<li><span class="math inline">\(4\times 5 = 20\)</span> bytes if stored as integer or <span class="math inline">\(2 \times 5 = 10\)</span> bytes if stored as a short integer</li>
+</ul></li>
+<li><span class="math inline">\(L\)</span>, the remaining dice rolls, represented by an integer value <span class="math inline">\(\in \{3,2,1,0\}\)</span>
+<ul>
+<li><span class="math inline">\(4\)</span> possible values</li>
+<li><span class="math inline">\(4\)</span> bytes if stored as integer, <span class="math inline">\(2\)</span> bytes if stored as short integer</li>
+</ul></li>
+<li><span class="math inline">\(O\)</span>, the score outcomes realized, represented by a binary vector indicating if the outcome have been realized
+<ul>
+<li><span class="math inline">\(2^{13}\)</span> possible values</li>
+<li><span class="math inline">\(13\)</span> bytes</li>
+</ul></li>
+<li><span class="math inline">\(B\)</span>, the remaining upper score before bonus, represented by a integer value
+<ul>
+<li><span class="math inline">\(64\)</span> possible values <span class="math inline">\([0,1,...,63]\)</span></li>
+<li><span class="math inline">\(4\)</span> bytes if stored as integer, <span class="math inline">\(2\)</span> if stored as short integer</li>
+</ul></li>
+</ul>
+<p>We can determine the state space size <span class="math inline">\(|S|\)</span> to be <span class="math inline">\(252 \times 4 \times 2^{13} \times 64 = 528,482,304\)</span> states.</p>
+<p>Assuming optimal data structure, the size of state in memory would be <span class="math inline">\(2 + 13 + 2 + 10 = 27\)</span> bytes (<span class="math inline">\(41\)</span> bytes if using integer instead of short integer). The total state space would take <span class="math inline">\(\approx 14\)</span> GB.</p>
+<p>We could reduce the state space size at the cost of losing information about our state by removing <span class="math inline">\(B\)</span>. This would reduce <span class="math inline">\(|S|\)</span> to <span class="math inline">\(8,257,536\)</span> and the memory needed to <span class="math inline">\(\approx 206\)</span> MB.</p>
+<pre><code>In previous work, various authors (Glenn, Verhoeff, Pawlewicz) have adopted different strategies to solve the game, which consequently affects the size of the state space and the definition of states or nodes</code></pre>
+</section>
+<section id="action-space" class="level4">
+<h4 class="anchored" data-anchor-id="action-space">Action space</h4>
+<p>The set of actions available <span class="math inline">\(A\)</span> depends on the current state, particularly on the remaining rolls <span class="math inline">\(R\)</span> and used categories <span class="math inline">\(C\)</span>. Actions can be categorized into two types : dice-rolling actions and scoring actions</p>
+<ul>
+<li><p>Dice rolling action <span class="math inline">\(A_{roll}\)</span> : At each turn, the player rolls all 5 dices once and then have the possibilities to re-roll any subset of those 5 dices (<span class="math inline">\(2^5 - 1\)</span> possibilities to exclude the case of rolling <span class="math inline">\(0\)</span> which would be equivalent to scoring)</p></li>
+<li><p>Scoring actions <span class="math inline">\(A_{score}\)</span> : At any point during their turn, the player can choose to score one of available outcomes based on current dice combinations and scores outcomes already realized.</p></li>
+</ul>
+<p>More formally we denote the action space for each state as <span class="math display">\[ A(s) =
+\begin{cases}
+A_{roll} \cup A_{score}(s) \text{ , if } R &gt;0 \\
+A_{score}(s) \ \ \ \ \ \ \ \ \ \ \ \ \text{ , if } R = 0\\
+\end{cases}      
+\]</span><span class="math display">\[A_{score}(s) = A_{score} - \{x \in O | x = 1 \}\]</span>We note that the size of the action space is dynamic and will vary across the stages of the game :</p>
+<ul>
+<li>Assuming <span class="math inline">\(R &gt; 0\)</span> and no realized outcomes <span class="math inline">\(|\{x \in O | x = 1 \}| = 0\)</span>, action space size is <span class="math display">\[|A(s)| = 2^5 - 1 + 13 = 44\]</span></li>
+<li>Assuming <span class="math inline">\(R &gt; 0\)</span> and 1 realized outcomes <span class="math inline">\(|\{x \in O | x = 1 \}| = 1\)</span>, action space size is <span class="math display">\[|A(s)| = 2^5 - 1 + 12 = 43\]</span> This diminution in the action space size pursue until we reach the final state of the game where <span class="math inline">\(|\{x \in O | x = 1 \}| = 13\)</span></li>
+</ul>
+<p>Action are represented by a boolean indicating the type of action and for rolling actions a vector of 5 boolean that indicate dice to be kept. For scoring action, instead of the vector of boolean, we define an integer that indicate the index of the score outcomes in <span class="math inline">\(O\)</span></p>
+<p>Total memory size for an action would be <span class="math inline">\(8\)</span> bytes and given the small size of the action space, the required memory for the action space is negligeable.</p>
+</section>
+<section id="transition-probability-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="transition-probability-matrix">Transition probability matrix</h4>
+<p>The transition probability matrix <span class="math inline">\(P\)</span> describes the probabilities of moving from any state <span class="math inline">\(s\)</span> to another state <span class="math inline">\(s^′\)</span> given an action <span class="math inline">\(a\)</span></p>
+<p>For dice-rolling actions, these probabilities are determined by the dice roll outcomes which are uniformly distributed among all possible dice combinations. For scoring actions, the transitions are deterministic to a new state with updated <span class="math inline">\(C\)</span> and <span class="math inline">\(V\)</span>.</p>
+<p>Given our state and action spaces, our TPM is a matrix of size <span class="math inline">\((|S| \times |A|) \times |S|\)</span></p>
+<p>We already start to get a grasp of the potential challenges due the large size of the state-action space. It is more practical to evaluate the transition probability in a “lazy” manner based on a given state-action pair than to precompute the complete TPM.</p>
+<p>We define this state transition function <span class="math inline">\(P(s'|a_{\text{roll}},s)\)</span> below :</p>
+<ul>
+<li>Let <span class="math inline">\(I_a\subseteq \{0,1,2,3,4 \}\)</span> be the set of indices of dice to reroll for a roll action <span class="math inline">\(a_{\text{roll}}\)</span></li>
+<li>We consider all possible outcomes of re-rolling dice in <span class="math inline">\(I_a\)</span> which corresponds to the Cartesian product <span class="math inline">\(D^{|I_a|}\)</span> where <span class="math inline">\(|I_a|\)</span> is the number of dice being rerolled.</li>
+<li>Assuming fair dice and independent roll, the probability of each combination <span class="math inline">\(d \in D^{|I_a|}\)</span> occurring is <span class="math inline">\(P(d) = (\frac{1}{6})^{|I_a|}\)</span></li>
+<li>For each combination <span class="math inline">\(d\)</span>, we construct a new state <span class="math inline">\(s'(d)\)</span> by replacing values of dice in <span class="math inline">\(I_a\)</span> with the values in <span class="math inline">\(d\)</span>, sorting the dice values of consistency in state representation</li>
+</ul>
+<p>The final transition probability is thus the sum of probabilities <span class="math inline">\(P(d)\)</span> for <span class="math inline">\(d\)</span> that lead to <span class="math inline">\(s'\)</span> from <span class="math inline">\(s\)</span> under action <span class="math inline">\(a_{\text{roll}}\)</span> : <span class="math display">\[P(s'|a_{\text{roll}}, s) = \sum_{d:s'(d) = s'}P(d)\]</span> For <span class="math inline">\(a_{\text{score}}\)</span> the transition is deterministic and is defined as <span class="math display">\[P(s'|a_{\text{score}},s) = \begin{cases}
+1 \text{ if }s'\text{is the resultant state from scoring action } a \text{ in state } s \\
+0 \text{ otherwise}
+\end{cases}\]</span></p>
+<p>We notice that the state transition function verify the Markov property as the probability of being in state <span class="math inline">\(s'\)</span> depends only on the previous state <span class="math inline">\(s\)</span> and the action <span class="math inline">\(a\)</span> and not on the history of previous states.</p>
+</section>
+<section id="reward-function" class="level4">
+<h4 class="anchored" data-anchor-id="reward-function">Reward function</h4>
+<p>The reward function <span class="math inline">\(R(s, a, s')\)</span> represents the score gained when transitioning from state <span class="math inline">\(s\)</span> to <span class="math inline">\(s'\)</span> via action <span class="math inline">\(a\)</span>. It is <span class="math inline">\(0\)</span> for all transitions except those involving scoring actions, where it equals the score of the category chosen, according to the rules of Yahtzee.</p>
+<p>We also define <span class="math inline">\(R_T(s)\)</span> as the final reward function for state <span class="math inline">\(s\)</span> at the end of the game. This function check if the condition for bonus are met and adds the bonus to the player’s total score : <span class="math display">\[R_T(s) = \begin{cases}
+35 \text{ if upper\_section\_score(s) } \geq 63 \\
+0 \text{ otherwise }
+\end{cases}\]</span>Where <span class="math inline">\(\text{upper\_section\_score(s)}\)</span> calculate the total score from the upper section outcomes in state <span class="math inline">\(s\)</span>.</p>
+<pre><code>Note : In our implementation of the Yahtzee game, we have not included the rule known as Yathzee bonus.</code></pre>
+</section>
+<section id="horizon" class="level4">
+<h4 class="anchored" data-anchor-id="horizon">Horizon</h4>
+<p>The game of Yahtzee stops once each player has filled the 13 possible outcomes, considering 4 possible values for <span class="math inline">\(L\)</span> we have a finite horizon <span class="math inline">\(T=52\)</span>.</p>
+</section>
+<section id="mcts-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="mcts-algorithm">MCTS algorithm</h2>
+<p>Monte Carlo Tree Search (MCTS) is a model-free, online planning method. The algorithm explores the decision space by building a search tree in a sequential manner. MCTS involve four phases in its execution, that are repeated until the computational budget is exhausted. The state-action space and the transition probability matrix are represented under the form of a graph.</p>
+<ol type="1">
+<li>Selection</li>
+</ol>
+<p>Starting from the root node, which is the current state of the MDP, the algorithm select child nodes in the tree until a leaf node is reached. The child selection is performed according to a selection policy. In our case we use the well-known UCT selection policy <span class="math display">\[\arg \max_{a \in A(s)}\bigg(\bar{X}(s,a) + C_p\sqrt{\frac{log(N(s))}{N(s,a)}}\bigg)\]</span> Where :</p>
+<ul>
+<li><span class="math inline">\(\bar{X}(s,a)\)</span> the average reward after taking action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span></li>
+<li><span class="math inline">\(N(s)\)</span> the number of visits to state <span class="math inline">\(s\)</span></li>
+<li><span class="math inline">\(N(s,a)\)</span> the number of times action <span class="math inline">\(a\)</span> has been selected from state <span class="math inline">\(s\)</span></li>
+<li><span class="math inline">\(C\)</span> the exploration parameter (can be adjusted to encourage/discourage exploration)</li>
+</ul>
+<ol start="2" type="1">
+<li>Expansion</li>
+</ol>
+<p>If the selected node is a non-terminal state and not fully expanded (meaning not all possible actions have been explored), a child node is added to the tree, representing one possible future states <span class="math inline">\(s'\)</span> resulting from an available action <span class="math inline">\(a \in A(s)\)</span>. We then switch to the child node and repeat the expansion procedure.</p>
+<ol start="3" type="1">
+<li>Simulation (rollout)</li>
+</ol>
+<p>From the child node, simulate random trajectories using a default policy (in our case, a random action selection policy) until a terminal state is reached.</p>
+<ol start="4" type="1">
+<li>Backpropagation</li>
+</ol>
+<p>After the simulation is done, the reward obtained is propagated back up the tree to update the nodes and actions involved in the selection and expansion phases.</p>
+<p>The updates are made using the following steps for each node visited in the path from the leaf node to the root :</p>
+<ul>
+<li>Increment the visit count <span class="math inline">\(N(s,a)\)</span> for the action <span class="math inline">\(a\)</span> taken at state <span class="math inline">\(s\)</span></li>
+<li>Update the average reward <span class="math inline">\(\bar{X}(s,a)\)</span> for the action <span class="math inline">\(a\)</span> at state <span class="math inline">\(s\)</span> as follows : <span class="math display">\[\bar{X} (s,a) \leftarrow \bar{X}(s,a) + \frac{1}{N(s,a)}\big(r - \bar{X}(s,a)\big)\]</span></li>
+</ul>
+<ol start="5" type="1">
+<li>Action selection</li>
+</ol>
+<p>Once we have exhausted our computational budget the simulation stops and we select the action that have the highest value <span class="math display">\[\arg \max_{a\in A(s)} \bar{X}(s_0,a)\]</span></p>
+</section>
+<section id="implementation" class="level2">
+<h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<p>The game engine and the Monte Carlo Tree Search (MCTS) algorithm for Yahtzee have been developed in both Python and JavaScript to provide flexibility in deployment and testing. The Python version was used primarily during the research phase, while the JavaScript version was developed later, for integration into the web application.</p>
+<p>Both implementations are open-source, the link to the repository containing their respective source code can be found in Appendix.</p>
+<p>Both of them are similar in terms of logic and sequence only minor differences due to language-specific features and integration need (i.e.: using web workers for MCTS computation in JS version to avoid blocking the UI). In this section we will discuss mainly of the JavaScript implementation and its integration in the web application while in the Results section describe experiments conducted using the Python version.</p>
+<p><strong>Features</strong></p>
+<p>The web application have two modes : AI opponent and AI assistant. In AI opponent mode, the player face the AI agent in a game of Yahtzee. In AI assistant mode, the player plays alone but benefits from advices coming from the AI agent.</p>
+<p>AI assistant provide the player with information such as:</p>
+<ul>
+<li>The mean state-action value <span class="math inline">\(\hat{X}(s,a)\)</span></li>
+<li>The standard error of the mean state-action value</li>
+<li>The sample standard deviation of the state-action values</li>
+<li>The sample size <span class="math inline">\(n\)</span>, corresponding number of time this action has been sampled during MCTS</li>
+<li>An histogram of the expected final score conditioned on the current state <span class="math inline">\(s\)</span> and the selected action <span class="math inline">\(a\)</span></li>
+</ul>
+<p>Note : The mean state-action value here is conditioned to following the policy determined by the MCTS algorithm</p>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>We aimed to test our agent and identify the optimal set of hyperparameters (exploration constant and number of simulations before making a decision). To account for potential interactions between these two hyperparameters and accommodate the stochastic nature of the game we approached this as a statistical inference problem rather than a stochastic optimization problem. <em>(I must admit, a personal bias might have influenced this choice, as I was eager to practice my experimental design skills.)</em></p>
+<p>We collected samples of scores from agent with different combinations of the hyperparameters (<span class="math inline">\(C \in [1/3, 1/\sqrt{2}, \sqrt{2}]\)</span> and <span class="math inline">\(sim \in [500,2500,5000]\)</span>) and performed a two-way ANOVA analysis to test the effect of both factors and potential interactions between them.</p>
+<p>Surprisingly, the results shows an absence of statistical significance by far for both the number of simulations (<span class="math inline">\(\text{p-value} \approx 0.39\)</span>) and the exploration constant <span class="math inline">\((\text{p-value} \approx 0.97)\)</span>. Interaction between factors is also very unlikely (<span class="math inline">\(\text{p-value} \approx 0.84\)</span>).</p>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<p>Given the results of the statistical analysis, we can conclude that the different value of the hyperparameters tested don’t impact the agent performance in a significant manner. While this outcome is not very surprising for the exploration constant, the fact that increasing the number of simulations by a factor of 5 does not improve the agent’s performance is quite concerning. Intuition would suggest that the performance of MCTS should increase with the number of simulations, but our empirical evidence suggests otherwise. This question could be further explored as a stochastic optimization problem, as mentioned in the results section, and might be the focus of future work.</p>
+<p>In terms of the goals of the project, being to have a lightweight autonomous Yahtzee agent capable of offering decent challenge and assistance to a human player, the results are also mitigated. While we have indeed succeeded in the implementation, the resulting average score of <span class="math inline">\(154\)</span> might be challenge for some player, it is far from the result of the optimal strategy for Yahtzee defined in previous work about this game. If we seek to improve the results, we could explore different approach.</p>
+<p>A clear approach would be to follow the methods described by previous authors and pre-compute parts of the state space values, storing them for use at runtime. Other potential avenues could include using Q-function approximation to enhance or even replace the MCTS algorithm for our agent.</p>
+<hr>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>Yahtzee optimal strategy</p>
+<ul>
+<li>A Nearly Optimal Computer Player in Multi-player Yahtzee, Jakub Pawlewicz</li>
+<li>An optimal strategy for Yahtzee, James Glenn</li>
+<li>Optimal solitaire Yahtzee strategies, Tom Verhoeff</li>
+</ul>
+<p>Monte Carlo Tree Search</p>
+<ul>
+<li>Monte-Carlo Tree Search for General Game Playing, Jean Mehat and Tristan Cazenave</li>
+<li>Improved Monte-Carlo Search, Levente Kocsis, Csaba Szepesv´ari, Jan Willemson</li>
+</ul>
+<p>Reinforcement Learning</p>
+<ul>
+<li><a href="https://gibberblot.github.io/rl-notes/intro/foreword.html">This online ebook</a>, Tim Miller</li>
+<li>Reinforcement Learning and Optimal Control, Dimitri P. Bertsekas</li>
+</ul>
+<p>Statistical analysis</p>
+<ul>
+<li>Experimental Design and Analysis, Howard J. Seltman</li>
+<li>Statistical Design and Analysis of Biological Experiments, Hans-Michael Kaltenbach</li>
+</ul>
+</section>
+<section id="appendix" class="level1">
+<h1>Appendix</h1>
+<section id="experimental-design" class="level4">
+<h4 class="anchored" data-anchor-id="experimental-design">1. Experimental design</h4>
+<p>Dependent variable <span class="math inline">\(Y_{i,j,k}\)</span> : Total score achieved in a game for factor&nbsp;<span class="math inline">\(\tau_j\)</span> with <span class="math inline">\(J\)</span>&nbsp;levels and factor <span class="math inline">\(a_k\)</span>&nbsp;with <span class="math inline">\(K\)</span>&nbsp;levels and <span class="math inline">\(i\)</span> indexes the observations in the corresponding group.</p>
+<p>Independent variables :</p>
+<ul>
+<li>Factor <span class="math inline">\(\tau\)</span> : Number of simulations with four levels <span class="math inline">\(j \in \{1,2,3,4\}\)</span>
+<ul>
+<li><span class="math inline">\(j=1\)</span> : MCTS with 500 simulations</li>
+<li><span class="math inline">\(j=2\)</span> : MCTS with 1000 simulations</li>
+<li><span class="math inline">\(j=3\)</span> : MCTS with 2500 simulations</li>
+</ul></li>
+<li>Factor <span class="math inline">\(a\)</span> : Value of the exploration constants <span class="math inline">\(C_p\)</span> with four levels <span class="math inline">\(k \in \{1,2,3,4\}\)</span>
+<ul>
+<li><span class="math inline">\(k=1\)</span> : Exploration constant <span class="math inline">\(C_p = 1/3\)</span></li>
+<li><span class="math inline">\(k=2\)</span> : Exploration constant <span class="math inline">\(C_p = 1/\sqrt{2}\)</span></li>
+<li><span class="math inline">\(k=3\)</span> : Exploration constant <span class="math inline">\(C_p = \sqrt{2}\)</span></li>
+</ul></li>
+</ul>
+<p>As we want to study main effects but also the potential interactions between the factors levels, we use a full factorial design resulting in <span class="math inline">\(9\)</span> distinct groups with <span class="math inline">\(n\)</span> observations per group.</p>
+<p>Hypothesis :</p>
+<ul>
+<li>Main effects
+<ul>
+<li><span class="math inline">\(H_{0A}\)</span> : All simulation numbers have identical mean score</li>
+<li><span class="math inline">\(H_{0B}\)</span> : All exploration constants levels have identical mean score</li>
+</ul></li>
+<li>Interaction effects
+<ul>
+<li><span class="math inline">\(H_{0A:B}\)</span> : There is no interaction between strategy</li>
+</ul></li>
+</ul>
+<p>We have also defined contrasts to test more specific hypothesis about differences between each groups but given the results of the F-test, they have not been conducted and are not included in the report.</p>
+</section>
+<section id="power-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="power-analysis">2. Power analysis</h4>
+<p>Assuming that the minimum of difference between groups is as follows, for <span class="math inline">\(i\)</span> the index of the factor number of simulations and the <span class="math inline">\(j\)</span> the index of the factor exploration constant</p>
+<ul>
+<li><span class="math inline">\(Y_{.,1,1} = 150\)</span></li>
+<li><span class="math inline">\(Y_{.,1,2} = 145\)</span></li>
+<li><span class="math inline">\(Y_{.,1,3} = 142.5\)</span></li>
+<li><span class="math inline">\(Y_{.,2,1} = 165\)</span></li>
+<li><span class="math inline">\(Y_{.,2,2} = 155\)</span></li>
+<li><span class="math inline">\(Y_{.,2,3} = 145\)</span></li>
+<li><span class="math inline">\(Y_{.,3,1} = 185\)</span></li>
+<li><span class="math inline">\(Y_{.,3,2} = 170\)</span></li>
+<li><span class="math inline">\(Y_{.,3,3} = 160\)</span></li>
+</ul>
+<p>And a sample variance of <span class="math inline">\(930\)</span> (from observations of the agent scores during development), we reach a power of <span class="math inline">\(0.8\)</span> around <span class="math inline">\(n=30\)</span> for the main effects. For interactions as the effect size is smaller, it require to increase up to <span class="math inline">\(n=170\)</span> to reach the desired power. We take a small margin of security and define <span class="math inline">\(n = 200\)</span> for this experiment.</p>
+<p><img src="pw_f_test.png" class="img-fluid"></p>
+</section>
+<section id="box-plot-of-the-groups" class="level4">
+<h4 class="anchored" data-anchor-id="box-plot-of-the-groups">3. Box plot of the groups</h4>
+<p><img src="box_plot.png" class="img-fluid"></p>
+</section>
+<section id="descriptive-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="descriptive-statistics">4. Descriptive statistics</h4>
+<p><span class="math display">\[\begin{array}{lccc} \textbf{Statistic} &amp; \textbf{Score} &amp; \\ \hline \text{Count} &amp; 1800 \\ \text{Mean} &amp; 154.300556 \\ \text{Std} &amp; 28.073401 \\ \text{Min} &amp; 76 \\ \text{25\%} &amp; 135 \\ \text{50\%} &amp; 156 \\ \text{75\%} &amp; 176 \\ \text{Max} &amp; 255\\ \end{array}\]</span></p>
+</section>
+<section id="anova-f-test-table" class="level4">
+<h4 class="anchored" data-anchor-id="anova-f-test-table">5. ANOVA F-test table</h4>
+<p><span class="math display">\[\begin{array}{lcccc} \textbf{} &amp; \textbf{SS} &amp; \textbf{F-statistic} &amp; \textbf{p-value} &amp; \textbf{df} \\ \hline \text{Factor A} &amp; 1491.87 &amp; 0.944 &amp; 0.389 &amp; 2 \\ \text{Factor B} &amp; 53.34 &amp; 0.034 &amp; 0.967 &amp; 2 \\ \text{Interactions} &amp; 1135.26 &amp; 0.359 &amp; 0.838 &amp; 4 \\ \text{Residuals} &amp; 1415139.93 &amp; - &amp; - &amp; 1791 \\ \text{Reduced Model} &amp; - &amp; 0.359 &amp; 0.838 &amp; 1795 \\ \end{array}\]</span></p>
+</section>
+<section id="levenes-test-for-equality-of-variances" class="level4">
+<h4 class="anchored" data-anchor-id="levenes-test-for-equality-of-variances">6. Levene’s test for equality of variances</h4>
+<p><span class="math display">\[\begin{array}{l|c} \text{F-statistic} &amp; 1.101 \\ \text{SS between} &amp; 2119.66 \\ \text{SS within} &amp; 431178.60 \\ \text{p-value} &amp; 0.360 \\ \text{df between} &amp; 8 \\ \text{df within} &amp; 1791 \\ \end{array}\]</span></p>
+</section>
+<section id="qq-plots-of-residuals" class="level4">
+<h4 class="anchored" data-anchor-id="qq-plots-of-residuals">7. QQ-plots of residuals</h4>
+<p><img src="qq_plot.png" class="img-fluid"></p>
+</section>
+<section id="code-repository" class="level4">
+<h4 class="anchored" data-anchor-id="code-repository">8. Code repository</h4>
+<ul>
+<li><a href="https://github.com/yacinebekka/YathzeeMCTSAgent">JavaScript</a></li>
+<li><a href="https://github.com/yacinebekka/yahtzee_mdp">Python</a></li>
+<li><a href="https://github.com/yacinebekka/statistics">Statistical tests implementation</a></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>©2022-2025 SAS BEKKA Consulting. Tous droits réservés</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
