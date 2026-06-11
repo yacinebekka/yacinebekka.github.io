@@ -70,7 +70,6 @@
 </blockquote>
 <h1>Abstract</h1>
 <p>In this technical report, we present the implementation and results of a lightweight Monte Carlo Tree Search (MCTS)-based autonomous agent for the game of Yahtzee, a dice game that involve both luck and strategy. The autonomous agent is designed to run entirely within an internet browser, requiring no backend support, and consistently achieves an average score of <span class="arithmatex">\(154\)</span> points. Additionally, we tested various combinations of MCTS hyperparameters and found that increasing the exploration constant <span class="arithmatex">\(C\)</span> had a small positive effect on score (<span class="arithmatex">\(\text{p-value} \approx 1.8\times 10^{-6}\)</span>)</p>
-<hr />
 <h1>Introduction</h1>
 <ul>
 <li>Context</li>
@@ -257,7 +256,6 @@ A_{score}(s) \ \ \ \ \ \ \ \ \ \ \ \ \text{ , if } R = 0\\
 <h1>Discussion</h1>
 <p>Given the results of the statistical analysis, we can conclude that the different value of the  hyperparameters tested don&rsquo;t impact the agent performance in a practically significant manner. The fact that increasing the number of simulations by a factor of 5 does not improve the agent&rsquo;s performance is quite surprising. Intuition would suggest that the performance of MCTS should increase with the number of simulations, but our empirical evidence suggests otherwise. This question could be further explored as a stochastic optimization problem, as mentioned in the results section, and might be the focus of future work.</p>
 <p>In terms of the goals of the project, being to have a lightweight autonomous Yahtzee agent capable of offering decent challenge and assistance to a human player, the results are also mitigated. While we have indeed succeeded in the implementation, the resulting average score of <span class="arithmatex">\(154\)</span> might be challenge for some player, it is far from the result of the optimal strategy for Yahtzee defined in previous work about this game. If we seek to improve the results, we could explore different approaches such as using Q-function approximation to enhance or even replace the MCTS algorithm.</p>
-<hr />
 <h1>References</h1>
 <p>Yahtzee optimal strategy</p>
 <ul>
