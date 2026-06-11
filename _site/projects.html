@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio &amp; ressources &mdash; Yacine Bekka</title>
+<link rel="stylesheet" href="retro.css">
+<!-- KaTeX (math). Renders client-side; nothing to install. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+</head>
+<body>
+
+<table class="page" cellpadding="6" cellspacing="4">
+<colgroup><col class="col-nav"><col class="col-main"></colgroup>
+<tbody>
+
+  <tr>
+    <td class="masthead" colspan="2">
+<pre class="term"><span class="prompt">$</span> whoami
+<span class="out">&gt; yacine bekka</span>
+<span class="prompt">$</span> cat /etc/motd
+<span class="out">&gt; carnet personnel &mdash; notes, projets, exp&eacute;rimentations</span>
+<span class="prompt">$</span> ls ~/
+<span class="out">accueil/   blog/   portfolio/   contact/</span>
+<span class="prompt">$</span> <span class="cursor">_</span></pre>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="nav" valign="top">
+      <p class="navhd">Navigation</p>
+      <ul>
+        
+          
+        
+        
+          <li><a href="index.html">Accueil</a></li>
+        
+          <li><a href="blog.html">Blog</a></li>
+        
+          <li class="here"><span>Portfolio</span></li>
+          
+        
+          <li><a href="contact.html">Contact</a></li>
+        
+      </ul>
+      <p class="navhd">Ailleurs</p>
+      <ul>
+        <li><a href="https://github.com/yacinebekka">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/yacine-bekka/">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/channel/UCzQQNkhty1PZMvqYbUj_RVw">YouTube</a></li>
+      </ul>
+      
+      <p class="navhd">Langue</p>
+      <p class="lang-toggle">
+        
+          <span class="here">FR</span> &middot; <a href="en/projects.html">EN</a>
+        
+      </p>
+      
+    </td>
+
+    <td class="main" valign="top">
+      
+<h1>Portfolio &amp; ressources</h1>
+
+<h2>Projets</h2>
+<p><strong>Agent autonome pour le Yahtzee</strong> — un agent Monte-Carlo Tree Search qui joue au Yahtzee, entièrement côté client. Modes adversaire et assistant, plus un rapport technique complet (MDP, MCTS, plan d&rsquo;expérience &amp; statistiques).</p>
+<p><a href="https://yacinebekka.github.io/YathzeeMCTSAgent/">Jouer</a> · <a href="TR%20-%20Yahtzee%20MCTS.html">Rapport</a> · <a href="https://github.com/yacinebekka/YathzeeMCTSAgent">Code (JS)</a></p>
+<p><strong>Option pricer (binomial tree)</strong> — moteur de pricing CRR pour options européennes/américaines (call &amp; put) sur actions, indices, devises et futures. Une version web interactive tourne entièrement dans le navigateur, avec quelques tests de référence contre Hull &amp; Black-Scholes.</p>
+<p><a href="option-pricer/">Pricer en ligne</a> · <a href="https://github.com/yacinebekka/option-pricer">Code (Python)</a></p>
+<p><strong>TS Proxy</strong> — implémentation d&rsquo;un serveur de proxy HTTP/HTTPS/SOCKS5 avec des fonctionnalités additionnelles : gestion de listes blanches/noires et contre-mesures basiques contre les attaques DDoS.</p>
+<p><a href="https://github.com/yacinebekka/ts_proxy">Code source</a></p>
+<h2>Ressources &amp; code</h2>
+<ul>
+<li><a href="https://github.com/yacinebekka/YathzeeMCTSAgent">YathzeeMCTSAgent</a> — l&rsquo;agent &amp; l&rsquo;application web (JavaScript)</li>
+<li><a href="https://github.com/yacinebekka/yahtzee_mdp">yahtzee_mdp</a> — le moteur &amp; le MCTS côté recherche (Python)</li>
+<li><a href="https://github.com/yacinebekka/option-pricer">option-pricer</a> — moteur de pricing binomial (Python)</li>
+<li><a href="https://github.com/yacinebekka/statistics">statistics</a> — bibliothèque de tests statistiques faite maison</li>
+<li><a href="https://github.com/yacinebekka/ts_proxy">ts_proxy</a> — proxy HTTP/HTTPS/SOCKS5</li>
+<li><a href="TR%20-%20Yahtzee%20MCTS.html">Rapport technique — Yahtzee MCTS</a></li>
+</ul>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td class="foot" colspan="2">
+      
+        Mise &agrave; jour&nbsp;: 2026 &middot; &copy; 2022&ndash;2026 Yacine Bekka
+      
+    </td>
+  </tr>
+
+</tbody></table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "$",  right: "$",  display: false}
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      throwOnError: false
+    });
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Six sigma et qualité de données, l&#39;erreur classique &mdash; Yacine Bekka</title>
+<link rel="stylesheet" href="../retro.css">
+<!-- KaTeX (math). Renders client-side; nothing to install. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+</head>
+<body>
+
+<table class="page" cellpadding="6" cellspacing="4">
+<colgroup><col class="col-nav"><col class="col-main"></colgroup>
+<tbody>
+
+  <tr>
+    <td class="masthead" colspan="2">
+<pre class="term"><span class="prompt">$</span> whoami
+<span class="out">&gt; yacine bekka</span>
+<span class="prompt">$</span> cat /etc/motd
+<span class="out">&gt; carnet personnel &mdash; notes, projets, exp&eacute;rimentations</span>
+<span class="prompt">$</span> ls ~/
+<span class="out">accueil/   blog/   portfolio/   contact/</span>
+<span class="prompt">$</span> <span class="cursor">_</span></pre>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="nav" valign="top">
+      <p class="navhd">Navigation</p>
+      <ul>
+        
+          
+        
+        
+          <li><a href="../index.html">Accueil</a></li>
+        
+          <li class="here"><span>Blog</span></li>
+          
+        
+          <li><a href="../projects.html">Portfolio</a></li>
+        
+          <li><a href="../contact.html">Contact</a></li>
+        
+      </ul>
+      <p class="navhd">Ailleurs</p>
+      <ul>
+        <li><a href="https://github.com/yacinebekka">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/yacine-bekka/">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/channel/UCzQQNkhty1PZMvqYbUj_RVw">YouTube</a></li>
+      </ul>
+      
+    </td>
+
+    <td class="main" valign="top">
+      
+<h1>Six sigma et qualité de données, l&#39;erreur classique</h1>
+<p class="entry-meta">May 31, 2023 &middot; 2 min &middot; Repost Linkedin</p>
+<div class="post-body">
+<p>Repost Linkedin : https://www.linkedin.com/posts/yacine-bekka_dataquality-data-datagovernance-activity-7069560641505619968-MXos?utm_source=share&amp;utm_medium=member_desktop</p>
+<hr />
+<p>L&rsquo;ERREUR à ne PAS FAIRE si tu veux appliquer la méthode Six Sigma à la DATA QUALITY</p>
+<p>Est-ce que tu as déjà entendu parler de SPC (Statistical Process Control) ?</p>
+<p>Pour résumer simplement, ça consiste à utiliser la statistique pour contrôler la stabilité d&rsquo;un processus.</p>
+<p>À la base développées pour l&rsquo;industrie, la plupart des méthodes de SPC reposent sur les principes suivant :</p>
+<p>• Dans un processus de fabrication stable, à entrée constante la variabilité en sortie va elle aussi être stable.
+• Tout écart trop important par rapport à la moyenne devrait donc être considéré comme une anomalie potentielle et être investigué.</p>
+<p>Avec l&rsquo;émergence du paradigme &ldquo;data-as-a-product&rdquo;, on pourrait avoir envie de faire la même chose pour nos données ?</p>
+<p>Et bien OUI et NON&hellip;</p>
+<p>NON car beaucoup de gens font l&rsquo;erreur de vouloir vérifier directement les données avec ces méthodes.</p>
+<p>Exemple : Si une valeur du champ X de la table Y est à +/- 6 écart-types alors c&rsquo;est une anomalie.</p>
+<p>Le problème c&rsquo;est que nos données ne sont pas uniquement le produit d&rsquo;un processus, mais aussi une représentation de la réalité.</p>
+<p>Et que l&rsquo;on ne sait pas si notre échantillon (aka notre dataset) est représentatif de la population &ldquo;réelle&rdquo; (ce n&rsquo;est peut-être pas un échantillon randomisé).</p>
+<p>Ni qu&rsquo;il contient des observations indépendantes entre elles.</p>
+<p>Pour te donner un exemple, imaginons que tu veuilles mettre en place ce type de contrôle sur l&rsquo;âge des salariés de l&rsquo;organisation.</p>
+<p>Tu fais tes calculs et tu te rends compte que l&rsquo;âge moyen est de 32 ans, avec +/- 3 ans d&rsquo;écart-type.</p>
+<p>Tu fais tes z-scores pour tous tes employés et tous les employés de +50 ans vont être considérés comme des anomalies....</p>
+<p>Ce qui n&rsquo;est pas forcément le cas, c&rsquo;est peut-être juste des employés plus âgés que la moyenne.</p>
+<p>En fait il y a beaucoup d&rsquo;autres raisons qui expliquent l&rsquo;écart qu&rsquo;une erreur de qualité de données.</p>
+<p>Ce n&rsquo;est donc pas une façon efficace pour vérifier la qualité des données.</p>
+<p>En revanche OUI, il est possible d&rsquo;utiliser ce genre de méthode pour la DATA QUALITY.</p>
+<p>Mais je garde le suspense&hellip; et je te dirai comment exactement dans une de mes prochaines vidéos !</p>
+</div>
+<p class="links" style="margin-top:1.6rem">&#9664;&nbsp;<a href="../blog.html">retour au blog</a></p>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td class="foot" colspan="2">
+      
+        Mise &agrave; jour&nbsp;: 2026 &middot; &copy; 2022&ndash;2026 Yacine Bekka
+      
+    </td>
+  </tr>
+
+</tbody></table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "$",  right: "$",  display: false}
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      throwOnError: false
+    });
+  }
+});
+</script>
+
+</body>
+</html>

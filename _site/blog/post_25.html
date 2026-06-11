@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data flow map &mdash; Yacine Bekka</title>
+<link rel="stylesheet" href="../retro.css">
+<!-- KaTeX (math). Renders client-side; nothing to install. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+</head>
+<body>
+
+<table class="page" cellpadding="6" cellspacing="4">
+<colgroup><col class="col-nav"><col class="col-main"></colgroup>
+<tbody>
+
+  <tr>
+    <td class="masthead" colspan="2">
+<pre class="term"><span class="prompt">$</span> whoami
+<span class="out">&gt; yacine bekka</span>
+<span class="prompt">$</span> cat /etc/motd
+<span class="out">&gt; carnet personnel &mdash; notes, projets, exp&eacute;rimentations</span>
+<span class="prompt">$</span> ls ~/
+<span class="out">accueil/   blog/   portfolio/   contact/</span>
+<span class="prompt">$</span> <span class="cursor">_</span></pre>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="nav" valign="top">
+      <p class="navhd">Navigation</p>
+      <ul>
+        
+          
+        
+        
+          <li><a href="../index.html">Accueil</a></li>
+        
+          <li class="here"><span>Blog</span></li>
+          
+        
+          <li><a href="../projects.html">Portfolio</a></li>
+        
+          <li><a href="../contact.html">Contact</a></li>
+        
+      </ul>
+      <p class="navhd">Ailleurs</p>
+      <ul>
+        <li><a href="https://github.com/yacinebekka">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/yacine-bekka/">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/channel/UCzQQNkhty1PZMvqYbUj_RVw">YouTube</a></li>
+      </ul>
+      
+    </td>
+
+    <td class="main" valign="top">
+      
+<h1>Data flow map</h1>
+<p class="entry-meta">Apr 25, 2023 &middot; 2 min &middot; Repost Linkedin</p>
+<div class="post-body">
+<p>Repost Linkedin : https://www.linkedin.com/posts/yacine-bekka_architecture-dataflow-datamanagement-activity-7056877072584962048-I4VF?utm_source=share&amp;utm_medium=member_desktop</p>
+<hr />
+<p>Est-ce que tu connais ce document SUPER UTILE pour s’y retrouver dans un SI COMPLEXE mais qui est souvent OUBLIÉ ? 😯</p>
+<p>…</p>
+<p>La DATA FLOW MAP !</p>
+<p>En français, cartographie des flux de données, est une représentation visuelle des échanges de données entre les applications d’une organisation.</p>
+<p>Elle pour but de faciliter la compréhension des échanges de données entre les différents systèmes informatiques de l’entreprise</p>
+<p>Niveaux de grains (du moins fin au plus fin):</p>
+<ul>
+<li>App-to-App et Process-by-process : Les flux de données entre applications sont représentés par processus métier</li>
+</ul>
+<p>(ex : CRM -&gt; ERP | Sales to Cash).</p>
+<ul>
+<li>App-to-App et Data-by-Data : Les flux de données entre applications sont représentés données par données</li>
+</ul>
+<p>(ex : CRM → ERP | Référentiel client).</p>
+<ul>
+<li>App-to-App et Function-by-Function : Les flux de données entre applications sont représentés par fonction</li>
+</ul>
+<p>(ex : Client CRM → ERP | Réplication journalière des nouveaux clients du CRM vers l’ERP).</p>
+<p>Comment créer une cartographie des flux de données à partir de zéro ?</p>
+<p>Ne vise pas la perfection du 1er coup, c’est impossible d&rsquo;être exhaustif et précis dès le départ.</p>
+<p>Commence par ce qui est déjà connu et met en perspective les informations recueillies.</p>
+<p>Plan étape par étape :</p>
+<ul>
+<li>
+<p>Classer par priorité toutes les applications gérées par la DSI.</p>
+</li>
+<li>
+<p>Préparer un questionnaire pour recueillir les infos dont tu as besoin (application source/cible, données échangées, fréquence, déclenchement, fonction, techno, etc)</p>
+</li>
+<li>
+<p>Identifier les responsables des applications côté IT (et si possible, les responsables côté métier également).</p>
+</li>
+<li>
+<p>Organiser des ateliers avec chaque responsable d&rsquo;application pour recueillir des informations sur les flux de données existants et futurs de leur application.</p>
+</li>
+<li>
+<p>À partir des informations recueillies, tu crées les différents niveaux de cartographie des flux de données.</p>
+</li>
+</ul>
+<p>L&rsquo;objectif est d&rsquo;obtenir rapidement une première version pour faciliter la suites des discussions sur l&rsquo;architecture globale</p>
+</div>
+<p class="links" style="margin-top:1.6rem">&#9664;&nbsp;<a href="../blog.html">retour au blog</a></p>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td class="foot" colspan="2">
+      
+        Mise &agrave; jour&nbsp;: 2026 &middot; &copy; 2022&ndash;2026 Yacine Bekka
+      
+    </td>
+  </tr>
+
+</tbody></table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "$",  right: "$",  display: false}
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      throwOnError: false
+    });
+  }
+});
+</script>
+
+</body>
+</html>

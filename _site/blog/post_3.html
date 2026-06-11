@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data quality dimensions &mdash; Yacine Bekka</title>
+<link rel="stylesheet" href="../retro.css">
+<!-- KaTeX (math). Renders client-side; nothing to install. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+</head>
+<body>
+
+<table class="page" cellpadding="6" cellspacing="4">
+<colgroup><col class="col-nav"><col class="col-main"></colgroup>
+<tbody>
+
+  <tr>
+    <td class="masthead" colspan="2">
+<pre class="term"><span class="prompt">$</span> whoami
+<span class="out">&gt; yacine bekka</span>
+<span class="prompt">$</span> cat /etc/motd
+<span class="out">&gt; carnet personnel &mdash; notes, projets, exp&eacute;rimentations</span>
+<span class="prompt">$</span> ls ~/
+<span class="out">accueil/   blog/   portfolio/   contact/</span>
+<span class="prompt">$</span> <span class="cursor">_</span></pre>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="nav" valign="top">
+      <p class="navhd">Navigation</p>
+      <ul>
+        
+          
+        
+        
+          <li><a href="../index.html">Accueil</a></li>
+        
+          <li class="here"><span>Blog</span></li>
+          
+        
+          <li><a href="../projects.html">Portfolio</a></li>
+        
+          <li><a href="../contact.html">Contact</a></li>
+        
+      </ul>
+      <p class="navhd">Ailleurs</p>
+      <ul>
+        <li><a href="https://github.com/yacinebekka">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/yacine-bekka/">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/channel/UCzQQNkhty1PZMvqYbUj_RVw">YouTube</a></li>
+      </ul>
+      
+    </td>
+
+    <td class="main" valign="top">
+      
+<h1>Data quality dimensions</h1>
+<p class="entry-meta">Aug 28, 2024 &middot; 2 min &middot; Repost Linkedin</p>
+<div class="post-body">
+<p>Repost Linkedin : https://www.linkedin.com/posts/yacine-bekka_dataquality-dama-data-activity-7016309770659766273-1AiP?utm_source=share&amp;utm_medium=member_desktop</p>
+<hr />
+<p>I have stopped using hashtag#dataquality dimensions and you should too ! Here’s why… ⬇ </p>
+<p>Can you really tell the difference between accuracy, consistency and validity dimension without looking at the hashtag#dama DMBOK ? I find this notion a bit confusing and difficult to explain to business people.</p>
+<p>I often see the case where those dimensions are used as a way to define data quality indicators (i.e. : accuracy rate or consistency rate) and usually there is not much clarity on what those indicators mean. The main problem is that interpretation of those dimensions can vary drastically depending on context and the audience.</p>
+<p>It is more useful to know what the metric represents exactly in plain business terms rather than know that it is the accuracy/consistency/validity/synchronicity/whatever dimensions indicator.</p>
+<p>Data quality indicators must be factual, precise, driven by business rules and cannot not rely only on those notions as they are too much subject to interpretation. It must also be easily shareable with people that are not be knowledgeable on those concepts as addressing the root cause(s) might involved virtually anybody in the organization.</p>
+<p>I’m not saying we should dump data quality dimension but maybe take a step back. Under the assumption that data quality rules are in fact business rules, the data quality indicators should measure if we comply with our business rules. Then data quality dimensions can be used as a way of categorizing our business rules and subsequent data quality indicators but not as the main driver for rules definition.</p>
+<p>To illustrate that, the reasonability rate of your customer referential most likely doesn&rsquo;t ring any bell to your business stakeholders or if it does chances are that the exact meaning is unclear… at best. On the other hand if you talk about the rate of invoice not associated with a valid customer, the exact meaning is much more perceptible at a glance, which would contribute to a better understanding of data quality by business.</p>
+<hr />
+<p>Original picture from Andrea Piacquadio on Pexels</p>
+<p><img alt="" src="post_2.jpg" /></p>
+</div>
+<p class="links" style="margin-top:1.6rem">&#9664;&nbsp;<a href="../blog.html">retour au blog</a></p>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td class="foot" colspan="2">
+      
+        Mise &agrave; jour&nbsp;: 2026 &middot; &copy; 2022&ndash;2026 Yacine Bekka
+      
+    </td>
+  </tr>
+
+</tbody></table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "$",  right: "$",  display: false}
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      throwOnError: false
+    });
+  }
+});
+</script>
+
+</body>
+</html>

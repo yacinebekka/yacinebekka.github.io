@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etude de cas : Gestion de la qualité de données chez le Groupe SeLoger &mdash; Yacine Bekka</title>
+<link rel="stylesheet" href="../retro.css">
+<!-- KaTeX (math). Renders client-side; nothing to install. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+</head>
+<body>
+
+<table class="page" cellpadding="6" cellspacing="4">
+<colgroup><col class="col-nav"><col class="col-main"></colgroup>
+<tbody>
+
+  <tr>
+    <td class="masthead" colspan="2">
+<pre class="term"><span class="prompt">$</span> whoami
+<span class="out">&gt; yacine bekka</span>
+<span class="prompt">$</span> cat /etc/motd
+<span class="out">&gt; carnet personnel &mdash; notes, projets, exp&eacute;rimentations</span>
+<span class="prompt">$</span> ls ~/
+<span class="out">accueil/   blog/   portfolio/   contact/</span>
+<span class="prompt">$</span> <span class="cursor">_</span></pre>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="nav" valign="top">
+      <p class="navhd">Navigation</p>
+      <ul>
+        
+          
+        
+        
+          <li><a href="../index.html">Accueil</a></li>
+        
+          <li class="here"><span>Blog</span></li>
+          
+        
+          <li><a href="../projects.html">Portfolio</a></li>
+        
+          <li><a href="../contact.html">Contact</a></li>
+        
+      </ul>
+      <p class="navhd">Ailleurs</p>
+      <ul>
+        <li><a href="https://github.com/yacinebekka">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/yacine-bekka/">LinkedIn</a></li>
+        <li><a href="https://www.youtube.com/channel/UCzQQNkhty1PZMvqYbUj_RVw">YouTube</a></li>
+      </ul>
+      
+    </td>
+
+    <td class="main" valign="top">
+      
+<h1>Etude de cas : Gestion de la qualité de données chez le Groupe SeLoger</h1>
+<p class="entry-meta">Mar 31, 2022 &middot; 8 min &middot; Case study</p>
+<div class="post-body">
+<h2>Introduction</h2>
+<p>Groupe Seloger est le groupe leader des portails immobiliers en France. Le groupe possède notamment les marques SeLoger, LogicImmo, Meilleurs Agents, etc</p>
+<p>La qualité des données est très importante pour le groupe étant donné que leur business model est étroitement lié aux données. En tant que portail d&rsquo;annonces immobilières, il est d’une importance majeur de servir des données de la plus haute qualité au utilisateurs du portail, sur les biens disponibles mais également pour leurs clients du groupe (principalement des agences immobilières), de pouvoir fournir des statistiques précises et de qualité sur les interactions des utilisateurs sur les annonces. La qualité des données est également un facilitateur majeur  d&rsquo;innovation pour le groupe car elle impacte la capacité à développer des nouveaux produits/fonctionnalités telle qu&rsquo;un moteur de recommandations basé sur les préférences des utilisateurs.</p>
+<p>Notre mission consiste à implémenter, en partant de zéro, un processus de gestion de la qualité des données pour la plateforme de données du groupe (hébergée sur Amazon AWS) en collaboration avec les équipes du département Data.</p>
+<h2>Challenges</h2>
+<ul>
+<li>
+<p>Important volume et grande variété de données collectées chaque jour dans la plateforme de données (150+ jeux de données allant de 10-15M à 20G entrées, allant du référentiel clients au interactions des utilisateurs sur les portails)</p>
+</li>
+<li>
+<p>Faible maturité et culture sur la gouvernance des données et la gestion de la qualité des données dans le groupe</p>
+</li>
+<li>
+<p>Faible implication initiales du &ldquo;métiers&rdquo;, interlocuteurs venant principalement des équipes IT/Data</p>
+</li>
+<li>
+<p>Les données de la plateforme sont utilisées par différents &ldquo;consommateurs&rdquo; internes pour des usages variés, définition de la qualité variant également selon les usages/interlocuteurs</p>
+</li>
+<li>
+<p>Pas de ressources dédiés à la gestion de la qualité de données, nécessité de s&rsquo;appuyer sur les équipes et outils existants</p>
+</li>
+<li>
+<p>Dû à l&rsquo;important volume de données et à l&rsquo;infrastructure technique, la reprise de données ainsi que la remédiation des causes racines peut nécessiter des coûts et des efforts élevés</p>
+</li>
+</ul>
+<h2>Solution</h2>
+<p>Afin de dépasser ces difficultés et livrer les résultats demandés, nous avons utilisé le Data Quality Launchpad, notre méthodologie pour accélérer votre transformation digitale et réduire vos déchets opérationnels en rendant votre organisation autonome pour gérer et améliorer de façon continue la qualité de vos données.</p>
+<ol>
+<li>Identify</li>
+</ol>
+<p>Pour cette première étape, nous échangeons avec les équipes data pour définir ensemble quelles sont les exigences en termes de qualité de données. Etant donné le nombre élevé de jeux de données à couvrir et le fait que nous n&rsquo;ayons pas accès à des interlocuteurs &ldquo;métiers&rdquo; nous avons utilisé une approche de type générique/spécifique pour la définition des standards de qualité de données (un standard de qualité de données est la collection des règles applicable à un jeux de données)</p>
+<p>Le standard de qualité générique est conçu pour être applicable à l&rsquo;ensemble des jeux de données et les standards spécifiques sont eux dédiés à un jeux de données en particulier. Cette approche nous permet de couvrir l&rsquo;ensemble des jeux de données avec le standard générique mais avec une précision amoindri (dû à la généricité du standard) et un effort de spécification faible alors que les standards spécifiques sont plus précis mais nécessite plus d&rsquo;implication des interlocuteurs &ldquo;métiers&rdquo;</p>
+<p>Une fois les standards de qualité définis et formalisés, nous dérivons ensuite les indicateurs de qualité associés et nous effectuons les mesures initiales de qualité. Nous avons ensuite analysé et présenté ces mesures au “data consumers” (collaborateurs utilisant ce jeux de données en particulier). Comme dans la plupart des organisations, les problèmes de qualité de données sont souvent cachés ou mal définis. Avec cette première étape nous avons découvert plusieurs problèmes de qualité à fort impact que nous avons présentés de façon factuel. Les “data consumers” ont été très surpris par certaines de ces découvertes et nous ont aidés à évaluer les impacts, prioriser les différents problèmes et générer de l’intérêt autour de la qualité de données.</p>
+<ol start="2">
+<li>Improve</li>
+</ol>
+<p>Dans le Groupe SeLoger, les équipes data travaillent de manière très autonome, en suivant la méthode Agile &ldquo;by-the-book&rdquo;. Afin de s&rsquo;appuyer sur les ressources, les outils et les modes de travail déjà en place dans le groupe, nous avons intégré les différentes activités de notre méthodologie de gestion de la qualité de données avec le processus actuel de gestion des données du groupe en répartissant les responsabilités sur les rôles existants. Nous accompagnons et aidons également à l&rsquo;adoption de ces nouvelles tâches auprès des différents collaborateurs via des sessions de formation et la rédaction de procédures opérationnelles normalisées.</p>
+<p>Une fois les rôles et responsabilités définis, nous nous sommes concentrés sur l&rsquo;investigation des causes racines pour les problèmes de data quality ayant la priorité la plus élevés. Pour cela, nous commençons par lister les différentes hypothèses de causes racine et nous vérifions et testons ensuite la validité de ces hypothèses par ordre de probabilité. Ce travail nécessite l&rsquo;implication de plusieurs équipes à l&rsquo;intérieur et à l&rsquo;extérieur du departement Data. L’intérêt généré par la découvertes de ces problèmes nous a aidé à impliquer ces différentes équipes, nous avons aussi bien distinguer la phase d&rsquo;identification des causes racines et leur résolution, en nous concentrant d&rsquo;abord uniquement sur l&rsquo;identification.</p>
+<p>Après avoir déterminé les causes racines des problèmes de qualité à haute priorité, nous avançons vers la phase de solution et d’analyse de coûts-bénéfices afin d&rsquo;arbitrer s’il est pertinent de corriger la cause racine ou non. Dans cette étude de cas, certains problèmes de qualité avaient un tel impact que les bénéfices dépassaient largement les coûts mais pour d&rsquo;autres ce n&rsquo;était pas le cas. Dans cette situation, nous avons définis des solutions alternatives qui, bien que non-optimales, permettent de prévenir les futurs problèmes autant que possible.</p>
+<ol start="3">
+<li>Communicate</li>
+</ol>
+<p>Pour la communication, nous concentrons nos efforts sur deux axes:</p>
+<p>Communication sur les aspects opérationnels (niveaux actuels de qualités de données, statut de résolution des problèmes de qualité, alertes de la part des &ldquo;consommateurs&rdquo; de données) via les notice de qualité de données</p>
+<p>Communication au management et de façon plus large, à l&rsquo;ensemble de la société (&ldquo;success stories&rdquo; de la qualité de données) via la Data Quality Newsletter</p>
+<p>Pour les notices de qualité de données nous publions des notices, disponibles pour l&rsquo;ensemble des collaborateurs utilisant ces données. Pour cela nous utilisons Confluence (l&rsquo;outil utilisé par les équipes Data pour leur site web interne contenant la documentation relatives aux jeux de données) ainsi que les démo de sprint. De cette manière nous pouvons partager les informations opérationnelles sur la qualité des données et recevoir des feedbacks de la part des collaborateurs en &ldquo;live&rdquo; et sur &ldquo;papier&rdquo;.</p>
+<p>Pour la Newsletter, nous utilisons Slack étant donné que c&rsquo;est l&rsquo;outil de communication principal au sein du groupe. Les différences avec les notices de qualité sont le contenu (moins opérationnels, plus orienté &ldquo;bénéfices&rdquo;), la périodicité de publication (newsletter est publié moins souvent que les notices) ainsi que le format (plus court et moins exhaustif que les notices)</p>
+<ol start="4">
+<li>Iterate</li>
+</ol>
+<p>A ce stade, l&rsquo;organisation est déjà autonome en termes de gestion de la qualité de données, la mission s’oriente donc vers l&rsquo;amélioration continue et la gestion de la qualité des données sur le long-terme</p>
+<p>Grâce au gain de maturité et l’intérêt généré autour de la gestion de la qualité de données nous avons eu une plus grande implication du management et des collaborateurs &ldquo;métiers&rdquo;. Ceci nous a permis de retravailler certains des standards de qualité afin de les rendre encore plus précis, ce qui à ensuite mené à la découverte de nouveaux problèmes de qualité.</p>
+<p>Pour ces nouveaux problèmes, nous suivons donc le processus de gestion de la qualité maintenant en place dans le groupe (décrit dans l&rsquo;étape &ldquo;Improve&rdquo;)</p>
+<p>Nous industrialisons également le suivi des indicateurs de qualités de données en développant un outil Python pour formaliser les standards de qualité, calculer les indicateurs associés et générer un tableau de bord récapitulatif</p>
+<h2>Résultats obtenus</h2>
+<ul>
+<li>
+<p>Meilleure visibilité sur les problèmes de qualité de données et les impacts métiers associés</p>
+</li>
+<li>
+<p>Évaluation factuelle du niveau actuel de qualité des données</p>
+</li>
+<li>
+<p>Définition de la qualité claire et partagée dans l’organisation (“producteur” de données, équipe data et “consommateurs” de données)</p>
+</li>
+<li>
+<p>Processus systématique pour résoudre les problèmes de qualité de données en utilisant les outils et ressources existantes </p>
+</li>
+<li>
+<p>Outil configurable et facile d’utilisation pour suivre l’évolution de la qualité des données et générer des graphiques</p>
+</li>
+<li>
+<p>Amélioration de la qualité des données pour les jeux de données les plus important de la plateforme (interaction utilisateurs et association aux annonces immobilières, adresse-mail utilisateurs et association au critères de recherches)</p>
+</li>
+<li>
+<p>Rapport réguliers et publication de notice de qualité de données pour partager les niveaux actuels de qualité de données ainsi que le statut de résolution des problèmes identifiés dans l’organisation</p>
+</li>
+<li>
+<p>Meilleur utilisations des ressources de l’équipe data grâce à la définition claire des rôles et responsabilités (plus de nettoyage de données “caché”)</p>
+</li>
+<li>
+<p>Confiance accru dans la qualité des données au sein de l’organisation</p>
+</li>
+<li>
+<p>Autonomie dans la gestion et l’amélioration continue de la qualité des données</p>
+</li>
+</ul>
+<h4>Témoignages</h4>
+<p>“Alors que nous étions au niveau 0 de maturité sur les sujets Data Quality au sein du pôle data du Groupe Se Loger, Yacine a su s&rsquo;adapter à notre contexte et à nos besoins afin de nous faire progresser.</p>
+<p>Très autonome, mais systématiquement dans la collaboration, il m&rsquo;a impressionnée par sa rapidité à comprendre notre contexte et à s&rsquo;adapter au mieux à nos besoins. Ce n&rsquo;est pas quelqu&rsquo;un qui abandonne au premier obstacle, on peut lui faire confiance pour aller au bout des choses.</p>
+<p>J&rsquo;ai apprécié sa force de proposition, sa proactivité et sa pédagogie, qui nous ont aidé à embarquer les parties prenantes sur l&rsquo;initiative. En plus de ça c&rsquo;est quelqu&rsquo;un qui fait preuve d&rsquo;une grande humilité, avec un bon esprit d&rsquo;équipe. En bref, je ne peux que le recommander et serai ravie de collaborer à nouveau avec lui.”</p>
+<p>Emanuelle Galet,  Product Owner Data chez Groupe Seloger</p>
+</div>
+<p class="links" style="margin-top:1.6rem">&#9664;&nbsp;<a href="../blog.html">retour au blog</a></p>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td class="foot" colspan="2">
+      
+        Mise &agrave; jour&nbsp;: 2026 &middot; &copy; 2022&ndash;2026 Yacine Bekka
+      
+    </td>
+  </tr>
+
+</tbody></table>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$$", right: "$$", display: true},
+        {left: "\\(", right: "\\)", display: false},
+        {left: "$",  right: "$",  display: false}
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      throwOnError: false
+    });
+  }
+});
+</script>
+
+</body>
+</html>
